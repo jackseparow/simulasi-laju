@@ -20,7 +20,7 @@
       align-items: center;
     }
     
-    /* Header Header BBGTK & Si Yo */
+    /* Header BBGTK & Si Yo */
     header {
       width: 100%;
       max-width: 1100px;
@@ -51,17 +51,26 @@
       color: #4a5568;
       font-weight: 600;
     }
-    .logo-img {
-      height: 50px;
+    
+    /* Style untuk Gambar Logo & Maskot */
+    .header-left img.mascot-img {
+      height: 55px;
+      width: auto;
       object-fit: contain;
     }
+    .header-right img.logo-img {
+      height: 50px;
+      width: auto;
+      object-fit: contain;
+    }
+    
     .mascot-box {
       display: flex;
       align-items: center;
-      gap: 8px;
+      gap: 10px;
       background: #ebf8ff;
-      padding: 6px 12px;
-      border-radius: 20px;
+      padding: 6px 14px;
+      border-radius: 30px;
       border: 1px solid #bee3f8;
     }
     .mascot-box span {
@@ -275,26 +284,26 @@
 </head>
 <body>
 
-  <!-- Header Header BBGTK & Si Yo -->
+  <!-- Header Banner dengan Gambar Logo & Maskot -->
   <header>
+    <!-- Kiri Atas: Maskot Si Yo -->
     <div class="header-left">
       <div class="mascot-box">
-        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#2b6cb0" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
-        <span>Si Yo (Taman Numerasi)</span>
+        <img src="maskot-siyo.png" alt="Maskot Si Yo" class="mascot-img">
+        <span>Si Yo</span>
       </div>
     </div>
     
+    <!-- Tengah: Judul Aplikasi -->
     <div class="header-title">
+      <p style="color: #2b6cb0; font-size: 12px; text-transform: uppercase;">Taman Numerasi</p>
       <h1>SIMULASI LAJU BENDA</h1>
       <p>Eksplorasi Perbandingan Kecepatan Lintasan 10 KM (Kanan ke Kiri)</p>
     </div>
 
+    <!-- Kanan Atas: Logo BBGTK DIY -->
     <div class="header-right">
-      <div style="text-align: right; margin-right: 8px;">
-        <div style="font-weight: bold; font-size: 13px; color: #1a365d;">BBGTK DIY</div>
-        <div style="font-size: 10px; color: #718096;">Kemendikbudristek</div>
-      </div>
-      <svg width="36" height="36" viewBox="0 0 24 24" fill="#3182ce"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
+      <img src="bbgtk diy logo.png" alt="Logo BBGTK DIY" class="logo-img">
     </div>
   </header>
 
@@ -309,7 +318,7 @@
     </div>
 
     <div class="object-grid" id="objectGrid">
-      <!-- Generated Dynamically -->
+      <!-- Dynamic Checkboxes -->
     </div>
 
     <div class="action-toolbar">
@@ -358,7 +367,7 @@
           </tr>
         </thead>
         <tbody id="statsTableBody">
-          <!-- Dynamically Updated -->
+          <!-- Dynamic Updates -->
         </tbody>
       </table>
     </div>
@@ -403,7 +412,7 @@
     const canvas = document.getElementById('simCanvas');
     const ctx = canvas.getContext('2d');
 
-    // Initialize UI Grid
+    // Initialize Object Selection UI
     function initObjectGrid() {
       const grid = document.getElementById('objectGrid');
       grid.innerHTML = '';
@@ -412,7 +421,7 @@
         const item = document.createElement('div');
         item.className = 'object-item';
 
-        const isChecked = idx < 5; // Select first 5 default
+        const isChecked = idx < 5; // Default 5 teratas tercentang
         
         let modeHtml = '';
         if (obj.isLiving) {
@@ -530,11 +539,11 @@
       simSpeedMultiplier = parseFloat(document.getElementById('simSpeed').value);
     }
 
-    // Main Loop Simulation
+    // Loop Utama Simulasi
     function gameLoop(timestamp) {
       if (!isRunning) return;
 
-      const dt = (timestamp - lastTimestamp) / 1000; // in seconds
+      const dt = (timestamp - lastTimestamp) / 1000;
       lastTimestamp = timestamp;
 
       const simDt = dt * simSpeedMultiplier;
@@ -544,7 +553,6 @@
 
       selectedObjects.forEach(obj => {
         if (!obj.finished) {
-          // speed in km/h -> km/sec
           const speedKmPerSec = obj.currentSpeed / 3600;
           obj.distanceKm += speedKmPerSec * simDt;
 
@@ -641,18 +649,18 @@
         const progress = Math.min(1.0, obj.distanceKm / TRACK_DISTANCE_KM);
         const objX = startX - progress * trackLengthPx;
 
-        // Draw Icon/Shape
+        // Draw Icon
         ctx.font = '20px sans-serif';
         ctx.textAlign = 'center';
 
-        // Flip image horizontally so movement faces left
+        // Mirror horizontal agar icon menghadap ke arah gerakan (kiri)
         ctx.save();
         ctx.translate(objX, laneY);
         ctx.scale(-1, 1); 
         ctx.fillText(obj.icon, 0, 0);
         ctx.restore();
 
-        // Draw Label Name next to icon
+        // Draw Label Nama
         ctx.fillStyle = obj.color;
         ctx.font = 'bold 11px sans-serif';
         ctx.textAlign = 'left';
@@ -660,12 +668,11 @@
       });
     }
 
-    // Update Stats Table
+    // Update Tabel Statistik
     function updateStatsTable() {
       const tbody = document.getElementById('statsTableBody');
       tbody.innerHTML = '';
 
-      // Sort objects by distance travelled descending
       const sorted = [...selectedObjects].sort((a, b) => b.distanceKm - a.distanceKm);
 
       sorted.forEach((obj, idx) => {
@@ -705,7 +712,7 @@
       document.getElementById('resultModal').style.display = 'none';
     }
 
-    // Initialize Page
+    // Initialize App
     initObjectGrid();
   </script>
 </body>
