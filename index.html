@@ -219,7 +219,7 @@
       display: flex;
       flex-direction: column;
       gap: 15px;
-      min-width: 0; /* Mencegah overflow flex item */
+      min-width: 0;
     }
     
     #canvas-card {
@@ -302,7 +302,6 @@
       margin-bottom: 12px;
     }
 
-    /* Responsif untuk Layar Kecil */
     @media (max-width: 900px) {
       .main-layout {
         flex-direction: column;
@@ -315,7 +314,7 @@
 </head>
 <body>
 
-  <!-- Header Banner dengan Gambar Logo & Maskot (Posisi Bertukar) -->
+  <!-- Header Banner -->
   <header>
     <!-- Kiri Atas: Logo BBGTK DIY -->
     <div class="header-left">
@@ -326,7 +325,7 @@
     <div class="header-title">
       <p style="color: #2b6cb0; font-size: 12px; text-transform: uppercase;">Taman Numerasi</p>
       <h1>SIMULASI LAJU BENDA</h1>
-      <p>Eksplorasi Perbandingan Kecepatan Lintasan 10 KM (Kanan ke Kiri)</p>
+      <p>Eksplorasi Perbandingan Kecepatan Lintasan 10 KM (Kiri ke Kanan)</p>
     </div>
 
     <!-- Kanan Atas: Maskot Si Yo -->
@@ -378,9 +377,9 @@
     <div class="sim-container">
       <div id="canvas-card">
         <div class="track-info">
-          <span>Garis Finish (10.00 km - Kiri)</span>
+          <span>Garis Start (0.00 km - Kiri)</span>
           <span id="timerDisplay">Waktu Simulasi: 00:00:00</span>
-          <span>Garis Start (0.00 km - Kanan)</span>
+          <span>Garis Finish (10.00 km - Kanan)</span>
         </div>
         <canvas id="simCanvas" width="900" height="400"></canvas>
       </div>
@@ -641,9 +640,9 @@
     function render() {
       ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-      const startX = canvas.width - 50; // Kanan (0 KM)
-      const finishX = 50;               // Kiri (10 KM)
-      const trackLengthPx = startX - finishX;
+      const startX = 50;               // Kiri (0 KM)
+      const finishX = canvas.width - 50; // Kanan (10 KM)
+      const trackLengthPx = finishX - startX;
 
       const laneHeight = 45;
       const startY = 40;
@@ -651,7 +650,7 @@
       // Draw Marker Lines & Background Track
       for (let i = 0; i <= 10; i++) {
         const km = i;
-        const x = startX - (km / 10.0) * trackLengthPx;
+        const x = startX + (km / 10.0) * trackLengthPx;
 
         ctx.beginPath();
         ctx.strokeStyle = i === 0 || i === 10 ? '#e53e3e' : '#cbd5e0';
@@ -677,30 +676,24 @@
         ctx.beginPath();
         ctx.strokeStyle = '#edf2f7';
         ctx.lineWidth = 1;
-        ctx.moveTo(finishX, laneY + 15);
-        ctx.lineTo(startX, laneY + 15);
+        ctx.moveTo(startX, laneY + 15);
+        ctx.lineTo(finishX, laneY + 15);
         ctx.stroke();
 
-        // Calculate Position From Right (0 KM) to Left (10 KM)
+        // Calculate Position From Left (0 KM) to Right (10 KM)
         const progress = Math.min(1.0, obj.distanceKm / TRACK_DISTANCE_KM);
-        const objX = startX - progress * trackLengthPx;
+        const objX = startX + progress * trackLengthPx;
 
-        // Draw Icon
+        // Draw Icon (Menghadap Kanan Secara Alami)
         ctx.font = '20px sans-serif';
         ctx.textAlign = 'center';
-
-        // Mirror horizontal agar icon menghadap ke arah gerakan (kiri)
-        ctx.save();
-        ctx.translate(objX, laneY);
-        ctx.scale(-1, 1); 
-        ctx.fillText(obj.icon, 0, 0);
-        ctx.restore();
+        ctx.fillText(obj.icon, objX, laneY);
 
         // Draw Label Nama
         ctx.fillStyle = obj.color;
         ctx.font = 'bold 11px sans-serif';
-        ctx.textAlign = 'left';
-        ctx.fillText(`${obj.name}`, objX + 15, laneY - 2);
+        ctx.textAlign = 'right';
+        ctx.fillText(`${obj.name}`, objX - 15, laneY - 2);
       });
     }
 
