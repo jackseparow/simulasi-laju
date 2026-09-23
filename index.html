@@ -52,7 +52,7 @@
       font-weight: 600;
     }
     
-    /* Style untuk Gambar Logo & Maskot */
+    /* Style Gambar Logo & Maskot */
     .header-left img.logo-img {
       height: 50px;
       width: auto;
@@ -79,7 +79,7 @@
       font-size: 14px;
     }
 
-    /* Layout Utama 2 Kolom (Sidebar Kiri & Konten Kanan) */
+    /* Layout Utama 2 Kolom */
     .main-layout {
       width: 100%;
       max-width: 1280px;
@@ -90,8 +90,8 @@
 
     /* Controls Section (Sisi Kiri Memanjang Ke Bawah) */
     .controls-card {
-      width: 340px;
-      min-width: 320px;
+      width: 360px;
+      min-width: 340px;
       background: #ffffff;
       border-radius: 12px;
       padding: 18px 18px;
@@ -147,6 +147,7 @@
       display: flex;
       align-items: center;
       gap: 8px;
+      flex: 1;
     }
     .object-info input[type="checkbox"] {
       width: 16px;
@@ -154,9 +155,10 @@
       cursor: pointer;
     }
     .object-label {
-      font-size: 12.5px;
+      font-size: 12px;
       font-weight: 600;
       color: #2d3748;
+      line-height: 1.3;
     }
     .mode-select {
       font-size: 11px;
@@ -213,7 +215,7 @@
       font-size: 12px;
     }
 
-    /* Simulation Canvas & Stats Container (Sisi Kanan) */
+    /* Simulation Canvas & Route Stats Container (Sisi Kanan) */
     .sim-container {
       flex: 1;
       display: flex;
@@ -248,21 +250,56 @@
       border: 1px solid #e2e8f0;
     }
 
-    /* Stats & Leaderboard Card */
-    .stats-card {
+    /* Route Estimation Section */
+    .route-card {
       background: white;
       border-radius: 12px;
-      padding: 15px 20px;
+      padding: 18px 20px;
       box-shadow: 0 4px 12px rgba(0,0,0,0.08);
     }
-    .stats-card h3 {
+    .route-card h3 {
       font-size: 15px;
       color: #2d3748;
-      margin-bottom: 10px;
+      margin-bottom: 12px;
       border-bottom: 1px solid #edf2f7;
       padding-bottom: 6px;
     }
-    
+
+    .route-selector {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 15px;
+      align-items: center;
+      background: #ebf8ff;
+      padding: 12px 15px;
+      border-radius: 8px;
+      margin-bottom: 15px;
+      border: 1px solid #bee3f8;
+    }
+    .route-select-group {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 13px;
+      font-weight: 600;
+    }
+    .route-select-group select {
+      padding: 6px 10px;
+      border-radius: 6px;
+      border: 1px solid #cbd5e0;
+      background: white;
+      font-size: 13px;
+    }
+    .distance-badge {
+      margin-left: auto;
+      background: #2b6cb0;
+      color: white;
+      padding: 5px 12px;
+      border-radius: 20px;
+      font-weight: bold;
+      font-size: 13px;
+    }
+
     .stats-table {
       width: 100%;
       border-collapse: collapse;
@@ -308,6 +345,9 @@
       }
       .controls-card {
         width: 100%;
+      }
+      .distance-badge {
+        margin-left: 0;
       }
     }
   </style>
@@ -373,7 +413,7 @@
       </div>
     </div>
 
-    <!-- Simulation Area & Stats (Sisi Kanan) -->
+    <!-- Simulation Area & Route Estimation (Sisi Kanan) -->
     <div class="sim-container">
       <div id="canvas-card">
         <div class="track-info">
@@ -384,25 +424,59 @@
         <canvas id="simCanvas" width="900" height="400"></canvas>
       </div>
 
-      <!-- Leaderboard / Stats -->
-      <div class="stats-card">
-        <h3>Klasemen & Statistik Laju Benda</h3>
+      <!-- Estimasi Waktu Tempuh Rute Jawa -->
+      <div class="route-card">
+        <h3>Estimasi Waktu Tempuh Rute Jawa</h3>
+        
+        <div class="route-selector">
+          <div class="route-select-group">
+            <label for="cityOrigin">Kota Asal:</label>
+            <select id="cityOrigin" onchange="calculateRouteDistance()">
+              <option value="Yogyakarta" selected>Yogyakarta</option>
+              <option value="Jakarta">Jakarta</option>
+              <option value="Bandung">Bandung</option>
+              <option value="Semarang">Semarang</option>
+
+              <option value="Surabaya">Surabaya</option>
+              <option value="Solo">Solo</option>
+              <option value="Malang">Malang</option>
+            </select>
+          </div>
+
+          <div class="route-select-group">
+            <label for="cityDestination">Kota Tujuan:</label>
+            <select id="cityDestination" onchange="calculateRouteDistance()">
+              <option value="Yogyakarta">Yogyakarta</option>
+              <option value="Jakarta">Jakarta</option>
+              <option value="Bandung">Bandung</option>
+              <option value="Semarang">Semarang</option>
+              <option value="Surabaya">Surabaya</option>
+              <option value="Solo" selected>Solo</option>
+              <option value="Malang">Malang</option>
+            </select>
+          </div>
+
+          <div class="distance-badge" id="distanceBadge">
+            Jarak: 65 km
+          </div>
+        </div>
+
         <table class="stats-table">
           <thead>
             <tr>
               <th>Pos</th>
               <th>Objek / Benda</th>
-              <th>Mode</th>
-              <th>Kecepatan Real (km/h)</th>
-              <th>Jarak Tempuh (km)</th>
-              <th>Waktu Tempuh</th>
-              <th>Status</th>
+              <th>Kecepatan (km/jam)</th>
+              <th>Estimasi Waktu Tempuh Rute Jawa</th>
             </tr>
           </thead>
-          <tbody id="statsTableBody">
+          <tbody id="routeTableBody">
             <!-- Dynamic Updates -->
           </tbody>
         </table>
+        <p style="font-size: 11px; color: #718096; margin-top: 8px; font-style: italic;">
+          *Perhitungan berdasarkan asumsi kecepatan konstan tanpa hambatan lalu lintas/istirahat ($t = \frac{s}{v}$).
+        </p>
       </div>
     </div>
 
@@ -420,7 +494,6 @@
 
   <script>
     // Database Objek & Kecepatan (km/h)
-    // flipIcon: true membalikkan posisi ikon secara horizontal agar menghadap kanan
     const objectDefinitions = [
       { id: 'roket', name: 'Roket (SpaceX Falcon)', speedWalk: 28000, speedRun: 28000, color: '#e53e3e', isLiving: false, icon: '🚀', flipIcon: false },
       { id: 'pesawat', name: 'Pesawat Terbang', speedWalk: 900, speedRun: 900, color: '#3182ce', isLiving: false, icon: '✈️', flipIcon: false },
@@ -436,6 +509,17 @@
       { id: 'manusia', name: 'Manusia', speedWalk: 4.5, speedRun: 25, color: '#4299e1', isLiving: true, icon: '🏃', flipIcon: true },
       { id: 'kurakura', name: 'Kura-kura', speedWalk: 0.2, speedRun: 0.8, color: '#38a169', isLiving: true, icon: '🐢', flipIcon: true }
     ];
+
+    // Matriks Jarak Antarkota Pulau Jawa (KM)
+    const cityDistances = {
+      "Yogyakarta": { "Yogyakarta": 0, "Solo": 65, "Semarang": 115, "Bandung": 390, "Jakarta": 560, "Surabaya": 325, "Malang": 390 },
+      "Solo": { "Yogyakarta": 65, "Solo": 0, "Semarang": 105, "Bandung": 440, "Jakarta": 540, "Surabaya": 260, "Malang": 325 },
+      "Semarang": { "Yogyakarta": 115, "Solo": 105, "Semarang": 0, "Bandung": 360, "Jakarta": 450, "Surabaya": 350, "Malang": 415 },
+      "Bandung": { "Yogyakarta": 390, "Solo": 440, "Semarang": 360, "Bandung": 0, "Jakarta": 150, "Surabaya": 690, "Malang": 750 },
+      "Jakarta": { "Yogyakarta": 560, "Solo": 540, "Semarang": 450, "Bandung": 150, "Jakarta": 0, "Surabaya": 780, "Malang": 850 },
+      "Surabaya": { "Yogyakarta": 325, "Solo": 260, "Semarang": 350, "Bandung": 690, "Jakarta": 780, "Surabaya": 0, "Malang": 95 },
+      "Malang": { "Yogyakarta": 390, "Solo": 325, "Semarang": 415, "Bandung": 750, "Jakarta": 850, "Surabaya": 95, "Malang": 0 }
+    };
 
     const TRACK_DISTANCE_KM = 10.0;
     let selectedObjects = [];
@@ -469,10 +553,12 @@
           `;
         }
 
+        const initialSpeed = obj.isLiving ? obj.speedRun : obj.speedWalk;
+
         item.innerHTML = `
           <div class="object-info">
             <input type="checkbox" id="chk_${obj.id}" ${isChecked ? 'checked' : ''} onchange="toggleObjectSelect('${obj.id}')">
-            <label for="chk_${obj.id}" class="object-label">${obj.icon} ${obj.name}</label>
+            <label for="chk_${obj.id}" class="object-label" id="lbl_${obj.id}">${obj.icon} ${obj.name} (${initialSpeed} km/jam)</label>
           </div>
           ${modeHtml}
         `;
@@ -487,6 +573,18 @@
     }
 
     function updateObjectMode(id) {
+      const obj = objectDefinitions.find(o => o.id === id);
+      if (obj) {
+        const modeElem = document.getElementById(`mode_${id}`);
+        const mode = modeElem ? modeElem.value : 'run';
+        const speed = mode === 'run' ? obj.speedRun : obj.speedWalk;
+        
+        // Update label text real-time
+        const lbl = document.getElementById(`lbl_${id}`);
+        if (lbl) {
+          lbl.innerText = `${obj.icon} ${obj.name} (${speed} km/jam)`;
+        }
+      }
       updateSelectedObjects();
     }
 
@@ -520,7 +618,7 @@
 
       adjustCanvasHeight();
       render();
-      updateStatsTable();
+      updateRouteTable();
     }
 
     function adjustCanvasHeight() {
@@ -568,7 +666,6 @@
       });
 
       render();
-      updateStatsTable();
     }
 
     function updateSimSpeed() {
@@ -604,7 +701,6 @@
 
       formatTimerDisplay();
       render();
-      updateStatsTable();
 
       if (allFinished && selectedObjects.length > 0) {
         isRunning = false;
@@ -707,27 +803,62 @@
       });
     }
 
-    // Update Tabel Statistik
-    function updateStatsTable() {
-      const tbody = document.getElementById('statsTableBody');
+    // Kalkulasi Jarak & Estimasi Waktu Tempuh Rute Jawa
+    function calculateRouteDistance() {
+      const origin = document.getElementById('cityOrigin').value;
+      const dest = document.getElementById('cityDestination').value;
+      const distance = cityDistances[origin] ? cityDistances[origin][dest] || 0 : 0;
+
+      document.getElementById('distanceBadge').innerText = `Jarak Lintasan: ${distance} km`;
+      updateRouteTable();
+    }
+
+    function formatHoursToReadable(totalHours) {
+      if (totalHours === 0) return "0 Menit (Sama)";
+      if (totalHours < 0.01) return "< 1 Detik";
+
+      const hours = Math.floor(totalHours);
+      const minutes = Math.round((totalHours - hours) * 60);
+
+      let str = "";
+      if (hours > 0) str += `${hours} Jam `;
+      if (minutes > 0 || hours === 0) str += `${minutes} Menit`;
+      
+      // Jika durasi sangat panjang (misal kura-kura/hewan lambat)
+      if (hours > 24) {
+        const days = (hours / 24).toFixed(1);
+        str += ` (~${days} Hari)`;
+      }
+
+      return str;
+    }
+
+    function updateRouteTable() {
+      const tbody = document.getElementById('routeTableBody');
       tbody.innerHTML = '';
 
-      const sorted = [...selectedObjects].sort((a, b) => b.distanceKm - a.distanceKm);
+      const origin = document.getElementById('cityOrigin').value;
+      const dest = document.getElementById('cityDestination').value;
+      const distanceKm = cityDistances[origin] ? cityDistances[origin][dest] || 0 : 0;
+
+      // Urutkan objek tercentang berdasarkan kecepatan tertinggi
+      const sorted = [...selectedObjects].sort((a, b) => b.currentSpeed - a.currentSpeed);
+
+      if (sorted.length === 0) {
+        tbody.innerHTML = `<tr><td colspan="4" style="text-align: center; color: #a0aec0; padding: 15px;">Pilih minimal satu objek di panel kiri.</td></tr>`;
+        return;
+      }
 
       sorted.forEach((obj, idx) => {
         const tr = document.createElement('tr');
-        
-        const modeLabel = obj.isLiving ? (obj.mode === 'run' ? 'Berlari' : 'Berjalan') : '-';
-        const statusLabel = obj.finished ? `<span style="color: green; font-weight: bold;">Selesai (${formatDuration(obj.finishTime)})</span>` : 'Bergerak...';
+        const travelHours = distanceKm / obj.currentSpeed;
+        const timeFormatted = formatHoursToReadable(travelHours);
 
         tr.innerHTML = `
           <td><strong>${idx + 1}</strong></td>
           <td>${obj.icon} ${obj.name}</td>
-          <td>${modeLabel}</td>
-          <td>${obj.currentSpeed} km/h</td>
-          <td>${obj.distanceKm.toFixed(2)} km</td>
-          <td>${formatDuration(obj.finished ? obj.finishTime : simTimeSeconds)}</td>
-          <td>${statusLabel}</td>
+          <td>${obj.currentSpeed} km/jam</td>
+          <td><strong>${timeFormatted}</strong></td>
         `;
         tbody.appendChild(tr);
       });
@@ -753,6 +884,7 @@
 
     // Initialize App
     initObjectGrid();
+    calculateRouteDistance();
   </script>
 </body>
 </html>
