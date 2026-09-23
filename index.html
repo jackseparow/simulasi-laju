@@ -23,7 +23,7 @@
     /* Header BBGTK & Si Yo */
     header {
       width: 100%;
-      max-width: 1100px;
+      max-width: 1280px;
       background: #ffffff;
       border-radius: 12px;
       padding: 12px 25px;
@@ -53,13 +53,13 @@
     }
     
     /* Style untuk Gambar Logo & Maskot */
-    .header-left img.mascot-img {
-      height: 55px;
+    .header-left img.logo-img {
+      height: 50px;
       width: auto;
       object-fit: contain;
     }
-    .header-right img.logo-img {
-      height: 50px;
+    .header-right img.mascot-img {
+      height: 55px;
       width: auto;
       object-fit: contain;
     }
@@ -79,38 +79,56 @@
       font-size: 14px;
     }
 
-    /* Controls Section */
-    .controls-card {
+    /* Layout Utama 2 Kolom (Sidebar Kiri & Konten Kanan) */
+    .main-layout {
       width: 100%;
-      max-width: 1100px;
+      max-width: 1280px;
+      display: flex;
+      gap: 20px;
+      align-items: flex-start;
+    }
+
+    /* Controls Section (Sisi Kiri Memanjang Ke Bawah) */
+    .controls-card {
+      width: 340px;
+      min-width: 320px;
       background: #ffffff;
       border-radius: 12px;
-      padding: 18px 22px;
+      padding: 18px 18px;
       box-shadow: 0 4px 12px rgba(0,0,0,0.08);
-      margin-bottom: 15px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
     }
     .controls-header {
       display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 12px;
+      flex-direction: column;
+      gap: 8px;
       border-bottom: 2px solid #edf2f7;
-      padding-bottom: 8px;
+      padding-bottom: 10px;
     }
     .controls-header h2 {
-      font-size: 16px;
+      font-size: 15px;
       color: #2d3748;
     }
+    .controls-header-btns {
+      display: flex;
+      gap: 6px;
+    }
+    .controls-header-btns button {
+      flex: 1;
+      padding: 6px 10px;
+      font-size: 11.5px;
+    }
 
-    /* Object Selector Grid */
+    /* Object Selector Grid Vertikal */
     .object-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
-      gap: 10px;
-      max-height: 220px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      max-height: 480px;
       overflow-y: auto;
-      padding-right: 5px;
-      margin-bottom: 15px;
+      padding-right: 4px;
     }
     .object-item {
       display: flex;
@@ -119,7 +137,7 @@
       background: #f7fafc;
       border: 1px solid #e2e8f0;
       border-radius: 8px;
-      padding: 8px 12px;
+      padding: 8px 10px;
       transition: background 0.2s;
     }
     .object-item:hover {
@@ -136,35 +154,37 @@
       cursor: pointer;
     }
     .object-label {
-      font-size: 13.5px;
+      font-size: 12.5px;
       font-weight: 600;
       color: #2d3748;
     }
     .mode-select {
-      font-size: 11.5px;
-      padding: 3px 6px;
+      font-size: 11px;
+      padding: 3px 4px;
       border-radius: 4px;
       border: 1px solid #cbd5e0;
       background: white;
     }
 
-    /* Action Toolbar */
+    /* Action Toolbar Vertikal */
     .action-toolbar {
       display: flex;
-      flex-wrap: wrap;
-      justify-content: space-between;
-      align-items: center;
-      gap: 12px;
+      flex-direction: column;
+      gap: 10px;
       background: #f7fafc;
-      padding: 10px 15px;
+      padding: 12px;
       border-radius: 8px;
+      margin-top: 5px;
     }
     .btn-group {
       display: flex;
       gap: 8px;
     }
+    .btn-group button {
+      flex: 1;
+    }
     button {
-      padding: 8px 16px;
+      padding: 8px 14px;
       border-radius: 6px;
       border: none;
       font-weight: bold;
@@ -181,24 +201,25 @@
 
     .speed-control {
       display: flex;
-      align-items: center;
-      gap: 8px;
-      font-size: 13px;
+      flex-direction: column;
+      gap: 4px;
+      font-size: 12px;
       font-weight: 600;
     }
     .speed-control select {
-      padding: 5px 8px;
+      padding: 6px 8px;
       border-radius: 4px;
       border: 1px solid #cbd5e0;
+      font-size: 12px;
     }
 
-    /* Simulation Canvas & Stats Container */
+    /* Simulation Canvas & Stats Container (Sisi Kanan) */
     .sim-container {
-      width: 100%;
-      max-width: 1100px;
+      flex: 1;
       display: flex;
       flex-direction: column;
       gap: 15px;
+      min-width: 0; /* Mencegah overflow flex item */
     }
     
     #canvas-card {
@@ -280,18 +301,25 @@
       color: #2b6cb0;
       margin-bottom: 12px;
     }
+
+    /* Responsif untuk Layar Kecil */
+    @media (max-width: 900px) {
+      .main-layout {
+        flex-direction: column;
+      }
+      .controls-card {
+        width: 100%;
+      }
+    }
   </style>
 </head>
 <body>
 
-  <!-- Header Banner dengan Gambar Logo & Maskot -->
+  <!-- Header Banner dengan Gambar Logo & Maskot (Posisi Bertukar) -->
   <header>
-    <!-- Kiri Atas: Maskot Si Yo -->
+    <!-- Kiri Atas: Logo BBGTK DIY -->
     <div class="header-left">
-      <div class="mascot-box">
-        <img src="maskot-siyo.png" alt="Maskot Si Yo" class="mascot-img">
-        <span>Si Yo</span>
-      </div>
+      <img src="bbgtk diy logo.png" alt="Logo BBGTK DIY" class="logo-img">
     </div>
     
     <!-- Tengah: Judul Aplikasi -->
@@ -301,76 +329,84 @@
       <p>Eksplorasi Perbandingan Kecepatan Lintasan 10 KM (Kanan ke Kiri)</p>
     </div>
 
-    <!-- Kanan Atas: Logo BBGTK DIY -->
+    <!-- Kanan Atas: Maskot Si Yo -->
     <div class="header-right">
-      <img src="bbgtk diy logo.png" alt="Logo BBGTK DIY" class="logo-img">
+      <div class="mascot-box">
+        <img src="maskot-siyo.png" alt="Maskot Si Yo" class="mascot-img">
+        <span>Si Yo</span>
+      </div>
     </div>
   </header>
 
-  <!-- Controls Panel -->
-  <div class="controls-card">
-    <div class="controls-header">
-      <h2>Pilih Objek Perbandingan</h2>
-      <div style="display: flex; gap: 8px;">
-        <button class="btn-secondary" onclick="selectAll(true)">Pilih Semua</button>
-        <button class="btn-secondary" onclick="selectAll(false)">Hapus Semua</button>
+  <!-- Layout Utama 2 Kolom -->
+  <div class="main-layout">
+    
+    <!-- Controls Panel (Sisi Kiri Memanjang ke Bawah) -->
+    <div class="controls-card">
+      <div class="controls-header">
+        <h2>Pilih Objek Perbandingan</h2>
+        <div class="controls-header-btns">
+          <button class="btn-secondary" onclick="selectAll(true)">Pilih Semua</button>
+          <button class="btn-secondary" onclick="selectAll(false)">Hapus Semua</button>
+        </div>
+      </div>
+
+      <div class="object-grid" id="objectGrid">
+        <!-- Dynamic Checkboxes -->
+      </div>
+
+      <div class="action-toolbar">
+        <div class="btn-group">
+          <button id="btnStart" class="btn-primary" onclick="toggleSimulation()">Mulai Balapan</button>
+          <button id="btnReset" class="btn-danger" onclick="resetSimulation()">Reset</button>
+        </div>
+
+        <div class="speed-control">
+          <label for="simSpeed">Pengali Waktu Simulasi:</label>
+          <select id="simSpeed" onchange="updateSimSpeed()">
+            <option value="1">1x (Waktu Nyata)</option>
+            <option value="10">10x Lebih Cepat</option>
+            <option value="50">50x Lebih Cepat</option>
+            <option value="100" selected>100x Lebih Cepat</option>
+            <option value="300">300x Lebih Cepat</option>
+          </select>
+        </div>
       </div>
     </div>
 
-    <div class="object-grid" id="objectGrid">
-      <!-- Dynamic Checkboxes -->
-    </div>
-
-    <div class="action-toolbar">
-      <div class="btn-group">
-        <button id="btnStart" class="btn-primary" onclick="toggleSimulation()">Mulai Balapan</button>
-        <button id="btnReset" class="btn-danger" onclick="resetSimulation()">Reset</button>
+    <!-- Simulation Area & Stats (Sisi Kanan) -->
+    <div class="sim-container">
+      <div id="canvas-card">
+        <div class="track-info">
+          <span>Garis Finish (10.00 km - Kiri)</span>
+          <span id="timerDisplay">Waktu Simulasi: 00:00:00</span>
+          <span>Garis Start (0.00 km - Kanan)</span>
+        </div>
+        <canvas id="simCanvas" width="900" height="400"></canvas>
       </div>
 
-      <div class="speed-control">
-        <label for="simSpeed">Pengali Waktu Simulasi:</label>
-        <select id="simSpeed" onchange="updateSimSpeed()">
-          <option value="1">1x (Waktu Nyata)</option>
-          <option value="10">10x Lebih Cepat</option>
-          <option value="50">50x Lebih Cepat</option>
-          <option value="100" selected>100x Lebih Cepat</option>
-          <option value="300">300x Lebih Cepat</option>
-        </select>
+      <!-- Leaderboard / Stats -->
+      <div class="stats-card">
+        <h3>Klasemen & Statistik Laju Benda</h3>
+        <table class="stats-table">
+          <thead>
+            <tr>
+              <th>Pos</th>
+              <th>Objek / Benda</th>
+              <th>Mode</th>
+              <th>Kecepatan Real (km/h)</th>
+              <th>Jarak Tempuh (km)</th>
+              <th>Waktu Tempuh</th>
+              <th>Status</th>
+            </tr>
+          </thead>
+          <tbody id="statsTableBody">
+            <!-- Dynamic Updates -->
+          </tbody>
+        </table>
       </div>
     </div>
-  </div>
 
-  <!-- Simulation Area -->
-  <div class="sim-container">
-    <div id="canvas-card">
-      <div class="track-info">
-        <span>Garis Finish (10.00 km - Kiri)</span>
-        <span id="timerDisplay">Waktu Simulasi: 00:00:00</span>
-        <span>Garis Start (0.00 km - Kanan)</span>
-      </div>
-      <canvas id="simCanvas" width="1000" height="400"></canvas>
-    </div>
-
-    <!-- Leaderboard / Stats -->
-    <div class="stats-card">
-      <h3>Klasemen & Statistik Laju Benda</h3>
-      <table class="stats-table">
-        <thead>
-          <tr>
-            <th>Pos</th>
-            <th>Objek / Benda</th>
-            <th>Mode</th>
-            <th>Kecepatan Real (km/h)</th>
-            <th>Jarak Tempuh (km)</th>
-            <th>Waktu Tempuh</th>
-            <th>Status</th>
-          </tr>
-        </thead>
-        <tbody id="statsTableBody">
-          <!-- Dynamic Updates -->
-        </tbody>
-      </table>
-    </div>
   </div>
 
   <!-- Result Modal -->
